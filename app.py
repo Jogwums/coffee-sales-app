@@ -105,11 +105,12 @@ try:
 
     st.altair_chart(chart_2)
 
-    st.write(df.columns)
+    # st.write(df.columns)
 
     st.write("### Monthly sales trend")
 
-    temp_3 = df.groupby("Month_name")["money"].sum().reset_index().sort_values(by="money", ascending=False)
+    temp_3 = df.groupby("Month_name")["money"].sum().\
+        reset_index().sort_values(by="money", ascending=False)
 
     st.dataframe(temp_3)
 
@@ -132,6 +133,20 @@ try:
     ).properties(height = 250)
 
     st.altair_chart(chart_4)
+
+    st.subheader("Average revenue per coffee sold ")
+
+    temp_5 = df.groupby("coffee_name")["money"].mean().\
+        reset_index().sort_values(by="money", ascending=True)
+
+    st.dataframe(temp_5)
+
+    chart_5 = alt.Chart(temp_5).mark_line(point=True).encode(
+        x=alt.X("coffee_name"),
+        y=alt.Y("money"),
+    ).properties(height = 250)
+
+    st.altair_chart(chart_5)
 
 
 except Exception as e:
