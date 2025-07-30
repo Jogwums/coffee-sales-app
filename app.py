@@ -37,8 +37,6 @@ try:
         if selected_values:
             filtered_df = filtered_df[filtered_df[key].isin(selected_values)]
     
-    # display the data 
-    st.dataframe(filtered_df)
 
 
     # section 2 : Calculations 
@@ -97,10 +95,43 @@ try:
 
     st.dataframe(temp_2)
 
+    chart_2 = alt.Chart(temp_2).mark_bar().encode(
+        x=alt.X("coffee_name:N"),
+        y=alt.Y("money:Q"),
+        color=alt.Color("coffee_name:N", legend=None)
+        
+    
+    ).properties(height = 250)
 
+    st.altair_chart(chart_2)
 
+    st.write(df.columns)
 
+    st.write("### Monthly sales trend")
 
+    temp_3 = df.groupby("Month_name")["money"].sum().reset_index().sort_values(by="money", ascending=False)
+
+    st.dataframe(temp_3)
+
+    # monthly plot 
+    chart_3 = alt.Chart(temp_3).mark_bar().encode(
+        x=alt.X("Month_name:N"),
+        y=alt.Y("money:Q"),
+        color=alt.Color("money:Q")
+    
+    ).properties(height = 250)
+
+    st.altair_chart(chart_3)
+
+    # date plot 
+    chart_4 = alt.Chart(df).mark_line(point=True).encode(
+        x=alt.X("date:T"),
+        y=alt.Y("money:Q"),
+        color=alt.Color("coffee_name:N")
+    
+    ).properties(height = 250)
+
+    st.altair_chart(chart_4)
 
 
 except Exception as e:
